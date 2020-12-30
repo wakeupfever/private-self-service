@@ -1,0 +1,53 @@
+{
+  "name": "private-self-service",
+  "version": "0.1.0",
+  "description": "Private self-service",
+  "main": "dist/cjs/index.js",
+  "typings": "dist/typings/index.d.ts",
+  "module": "dist/esm/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "lint": "(tsc -p . --noEmit) && (eslint . --ext .ts) && (prettier --list-different src/*.ts)",
+    "dev": "yarn gulp server --mode dev",
+    "prepare": "yarn build:clean ; yarn build:cjs ; yarn build:esm ; yarn build:typings",
+    "build:clean": "rm -rf dist",
+    "build:esm": "tsc --module es2015 --target es2018 --outDir dist/esm && mv dist/esm/index.js dist/esm/index.mjs",
+    "build:cjs": "tsc --module commonjs --target es2018 --outDir dist/cjs",
+    "build:typings": "tsc --declaration --outDir dist/typings --emitDeclarationOnly"
+  },
+  "keywords": [
+    "update",
+    "service",
+    "svn",
+    "workflow",
+    "ssh",
+    "sftp",
+    "file"
+  ],
+  "author": "onefour",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wakeupfive/private-self-service/issues"
+  },
+  "homepage": "https://github.com/wakeupfive/private-self-service#readme",
+  "devDependencies": {
+    "chalk": "^4.1.0",
+    "gulp": "^4.0.2",
+    "inquirer": "^7.3.3",
+    "log-symbols": "^4.0.0",
+    "minimist": "^1.2.5",
+    "node-ssh": "^9.0.0",
+    "ora": "^5.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "ssh2-sftp-client": "^6.0.0",
+    "typescript": "3.8.3"
+  }
+}
