@@ -13,7 +13,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "self-service": "node dist/cjs/gulp/performTask.js"
+    "self-service": "bin/self-service.js"
   },
   "scripts": {
     "lint": "(tsc -p . --noEmit) && (eslint . --ext .ts) && (prettier --list-different src/*.ts)",
