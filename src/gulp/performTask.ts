@@ -1,3 +1,9 @@
-import { initTask } from "./initTask";
+import { ScriptC } from "../command/index"
 
-initTask()
+const { handleCommand } = new ScriptC()
+
+const init = () => {
+  handleCommand('yarn gulp v --mode dev')
+}
+
+init()

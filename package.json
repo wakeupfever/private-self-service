@@ -12,6 +12,9 @@
     },
     "./package.json": "./package.json"
   },
+  "bin": {
+    "self-service": "node dist/cjs/gulp/performTask.js"
+  },
   "scripts": {
     "lint": "(tsc -p . --noEmit) && (eslint . --ext .ts) && (prettier --list-different src/*.ts)",
     "dev": "yarn gulp server --mode dev",

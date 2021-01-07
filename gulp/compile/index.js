@@ -24,7 +24,7 @@ function getJsonFiles(jsonPath) {
 }
 
 function esModule (out) {
-  out.handleVueBuild('yarn build:esm').then(r => {
+  out.handleCommand('yarn build:esm').then(r => {
     console.log('\n' + r)
     printSuccess('ts文件生成ES2015文件成功')
   }).catch(e => {
@@ -33,7 +33,7 @@ function esModule (out) {
 }
 
 function commonModule (out) {
-  out.handleVueBuild('yarn build:cjs').then(r => {
+  out.handleCommand('yarn build:cjs').then(r => {
     console.log('\n' + r)
     printSuccess('ts文件生成CommonJS文件成功')
   }).catch(e => {

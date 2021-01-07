@@ -3,24 +3,12 @@ import { exec } from 'child_process'
 
 export class ScriptC {
   /**
-   * @description 执行编译输出命令
+   * @description Command 执行异常
    */
-  handleVueBuild(scriptsSh: string) {
+  handleCommand(scriptsSh: string): Promise<string> {
     return new Promise((resolve, reject) => {
       exec(scriptsSh, (error, stdout) => {
-        if (error) reject(new Error('项目编译异常'))
-        resolve(stdout)
-      })
-    })
-  }
-
-  /**
-   * @description 删除编译后残留文件
-   */
-  handleDelFiles(dist: string) {
-    return new Promise((resolve, reject) => {
-      exec(`rm -rf ${dist}`, (error, stdout) => {
-        if (error) reject(new Error('项目删除异常'))
+        if (error) reject(new Error('Command 执行异常'))
         resolve(stdout)
       })
     })
