@@ -48,13 +48,13 @@ export class ProxyInquirer {
 
   /**
    * @description confirm 方法实现
-   * @param {InquirerAlias} name
+   * @param {string} message
    * @param {boolean} isInquirer
    * @return {*}  {(Promise<Function | { alias: boolean }>)}
    * @memberof ProxyInquirer
    */
-  handlerConfirm(name: InquirerAlias, isInquirer: boolean): Promise<Function | { alias: boolean } | { alias: InquirerAlias }> {
-    this.inquirerConfig.message = `${name}确认更新吗`
+  handlerConfirm(message: string, isInquirer: boolean = true): Promise<Function | { alias: boolean } | { alias: InquirerAlias }> {
+    this.inquirerConfig.message = message
     this.inquirerConfig.type = 'confirm'
     if (isInquirer) {
       return this.baseInquirer({ ...this.inquirerConfig })

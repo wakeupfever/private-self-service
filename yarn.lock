@@ -435,6 +435,11 @@ color-support@^1.1.3:
   resolved "https://registry.yarnpkg.com/color-support/-/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
   integrity sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
 
+commander@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.npm.taobao.org/commander/download/commander-6.2.1.tgz?cache=0&sync_timestamp=1607931378482&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcommander%2Fdownload%2Fcommander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
+  integrity sha1-B5LraC37wyWZm7K4T93duhEKxzw=
+
 component-emitter@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
@@ -2075,13 +2080,6 @@ set-value@^2.0.0, set-value@^2.0.1:
     is-plain-object "^2.0.3"
     split-string "^3.0.1"
 
-sftpcopy@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/sftpcopy/-/sftpcopy-1.0.0.tgz#2c1cd3c241138e1545945597b6bada325236f2be"
-  integrity sha512-xP7m/C/qbvXTYFHiPN5kcE3Fd87it3RLrhND2DNaqsakpoYNvobiIcQcNezJxqoZ9hRJvpZ6WwegovAtNrL9uA==
-  dependencies:
-    ssh2-sftp-client "^4.2.3"
-
 shell-escape@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/shell-escape/-/shell-escape-0.2.0.tgz#68fd025eb0490b4f567a027f0bf22480b5f84133"
@@ -2181,15 +2179,6 @@ split-string@^3.0.1, split-string@^3.0.2:
   dependencies:
     extend-shallow "^3.0.0"
 
-ssh2-sftp-client@^4.2.3:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/ssh2-sftp-client/-/ssh2-sftp-client-4.3.1.tgz#73871750fa068c3f6b979d28b276c174566d6692"
-  integrity sha512-KAvu6EqIKCGoh9lKvH/WbFt8+vrXEq/WgcCQFBNuS9S4oyVkbZv1TtLkZ0ppaHkQteRDf1gGFh/HOT7FrO4DwQ==
-  dependencies:
-    concat-stream "^2.0.0"
-    retry "^0.12.0"
-    ssh2 "^0.8.7"
-
 ssh2-sftp-client@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npm.taobao.org/ssh2-sftp-client/download/ssh2-sftp-client-6.0.0.tgz#4e1b063bdb2efed6de2a125909108e72ce942ee5"
@@ -2208,7 +2197,7 @@ ssh2-streams@~0.4.10:
     bcrypt-pbkdf "^1.0.2"
     streamsearch "~0.1.2"
 
-ssh2@^0.8.7, ssh2@^0.8.9:
+ssh2@^0.8.9:
   version "0.8.9"
   resolved "https://registry.yarnpkg.com/ssh2/-/ssh2-0.8.9.tgz#54da3a6c4ba3daf0d8477a538a481326091815f3"
   integrity sha512-GmoNPxWDMkVpMFa9LVVzQZHF6EW3WKmBwL+4/GeILf2hFmix5Isxm7Amamo8o7bHiU0tC+wXsGcUXOxp8ChPaw==

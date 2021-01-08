@@ -5,10 +5,10 @@ import NodeSSH from 'node-ssh'
 import fs from 'fs'
 import path from 'path'
 
-import { uploadFileSftp } from '../core/lib/uploadFileSftp'
-import { With } from '../core/lib/base'
-import { InquirerAlias, ProxyInquirer } from '../core/lib/proxyInquirer'
-import { printError, successLog } from '../core/lib/outputLog'
+import { uploadFileSftp } from '../core/util/uploadFileSftp'
+import { With } from '../core/util/base'
+import { InquirerAlias, ProxyInquirer } from '../core/util/proxyInquirer'
+import { printError, successLog } from '../core/util/outputLog'
 
 const ssh = new NodeSSH()
 
@@ -256,7 +256,7 @@ export class UpdateServer extends With(ProxyInquirer) {
         }
       ]
     }
-    this.handlerConfirm(name, isInquirer).then(async ({ alias }: { alias: boolean }) => {
+    this.handlerConfirm(`${name}确认更新吗`, isInquirer).then(async ({ alias }: { alias: boolean }) => {
       if (alias) {
         uploadFileSftp(sshConfig)
       }
@@ -274,7 +274,7 @@ export class UpdateServer extends With(ProxyInquirer) {
     const successful: string[] = []
     const { dist, remote, remoteWidthList = [], getCopyFile, isGetFiles, name, isInquirer } = project
     if (isGetFiles) await this.getCopyFile(getCopyFile, dist)
-    this.handlerConfirm(name, isInquirer).then(({ alias }: { alias: boolean }) => {
+    this.handlerConfirm(`${name}确认更新吗？`, isInquirer).then(({ alias }: { alias: boolean }) => {
       if (alias) {
         ssh.connect(config).then(async () => {
           ssh.putDirectory(dist, remote, {

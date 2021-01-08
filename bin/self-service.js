@@ -1,9 +1,8 @@
-const { ScriptC } = require('../dist/cjs/command/index')
-const { handleCommand } = new ScriptC()
+// const { init } = require('../dist/cjs/src/service/index')
+const { init } = require('../dist/cjs/service/index')
 
-const init = async () => {
-  const w = await handleCommand('yarn gulp v --mode dev')
-  console.log(w)
-}
+const rawArgv = process.argv.slice(2)
+const args = require('minimist')(rawArgv)
+const command = args._[0]
 
-init()
+init(command, args, rawArgv)

@@ -1,5 +1,5 @@
 'use strict'
-import { With } from '../core/lib/base'
+import { With } from '../core/util/base'
 import { ScriptC } from './scriptC'
 
 export class GitC extends With(ScriptC) {

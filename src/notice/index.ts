@@ -1,6 +1,6 @@
 'use strict'
 import axios from 'axios'
-import { timeFormat } from '../core/lib/formatDate'
+import { timeFormat } from '../core/util/formatDate'
 
 export class GetNotice {
   /**

@@ -1,6 +1,6 @@
 import minimist from 'minimist'
 import { getConfigExists } from '../core/config';
-import { printError } from '../core/lib/outputLog'
+import { printError } from '../core/util/outputLog'
 
 /**
  * @description 获取基本信息
@@ -18,6 +18,7 @@ export const getConfig = () => {
     return null
   }
   const config = getConfigExists()
+  if (!config) return
   const configMode = config[mode]
   if (!configMode) {
     printError('请检查配置文件模式')

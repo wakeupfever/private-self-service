@@ -17,8 +17,8 @@
   },
   "scripts": {
     "lint": "(tsc -p . --noEmit) && (eslint . --ext .ts) && (prettier --list-different src/*.ts)",
-    "dev": "yarn gulp server --mode dev",
-    "prepare": "yarn build:clean ; yarn build:cjs ; yarn build:esm ; yarn build:typings",
+    "dev": "yarn build:cjs && yarn gulp server --mode dev",
+    "prepare": "yarn build:clean; yarn build:cjs; yarn build:esm; yarn build:typings",
     "build:clean": "rm -rf dist",
     "build:esm": "tsc --module es2015 --target es2018 --outDir dist/esm && mv dist/esm/index.js dist/esm/index.mjs",
     "build:cjs": "tsc --module commonjs --target es2018 --outDir dist/cjs",
@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "axios": "^0.21.0",
+    "commander": "^6.2.1",
     "ssh2-sftp-client": "^6.0.0",
     "typescript": "3.8.3"
   }
