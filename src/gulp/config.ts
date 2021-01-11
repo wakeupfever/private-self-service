@@ -18,7 +18,10 @@ export const getConfig = () => {
     return null
   }
   const config = getConfigExists()
-  if (!config) return
+  if (!config) {
+    printError('请检查当前环境是否存在配置文件')
+    return
+  }
   const configMode = config[mode]
   if (!configMode) {
     printError('请检查配置文件模式')

@@ -21,7 +21,7 @@ export class GetNotice {
    * @param {*} publisher
    * @memberof GetNotice
    */
-  serializationGitProject(branchInfo, publisher, name, tapdInfo, dingTalk) {
+  serializationGitProject(branchInfo, publisher, name, testInfo, dingTalk) {
     if (Array.isArray(branchInfo)) {
       new TypeError('请检查branchInfo参数')
     }
@@ -31,7 +31,7 @@ export class GetNotice {
     const { development } = dingTalk
     const { robot } = development
     console.log(robot, 'robot')
-    const { testers } = tapdInfo
+    const { testers } = testInfo
     let mkt = `当前项目：${name}\n`
     mkt += `发布项目：${name}\n`
     mkt += `发布版本：${branchInfo.join(',')}\n`

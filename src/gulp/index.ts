@@ -1,6 +1,8 @@
-import { initTask } from './initTask'
+// import { initTask } from './initTask'
+import config from '../core/lib/init'
 
 export const v1 = (cb) => {
-  initTask()
+  // initTask()
+  config.perform('test')
   cb()
 }
