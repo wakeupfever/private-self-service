@@ -1,32 +1,21 @@
-import { ProxyInquirer } from '../util/proxyInquirer'
-import { getConfigExists } from '../config/index'
-import { infoLog } from '../util/outputLog'
+import { configFileURL } from '../config/index'
+import { initCreateConfigFile } from './init'
+import { UpdateServer } from '../../updateService/index'
 
 export default {
   description: '文件上传服务',
-  perform: () => {
-    const isExistConfigFile = getConfigExists()
-    if (isExistConfigFile) {
-      infoLog('当前环境下已存在：self.config.js 文件')
-      const { handlerConfirm } = new ProxyInquirer()
-      handlerConfirm('是否重置配置文件：self.config.js 文件').then((alias) => {
-        if (alias) {
-        }
-      })
-    }
+  perform: (mode: string = '') => {
+    initCreateConfigFile(mode, () => {
+      const configFileInfo = require(configFileURL)
+      const config = configFileInfo[mode]
+      const { project, serverFiles } = config
+      const { coverUpData } = project
+      const updateServer = new UpdateServer()
+      if (coverUpData) {
+        updateServer.uploadFile(serverFiles, project)
+      } else {
+        updateServer.coverUploadFile(serverFiles, project)
+      }
+    })
   }
-  // desc: string = '初始化配置信息'
-
-  // perform () {
-  //   const isExistConfigFile = getConfigExists()
-  //   if (isExistConfigFile) {
-  //     infoLog('当前环境下已存在：self.config.js 文件')
-  //     const { handlerConfirm } = new ProxyInquirer()
-  //     handlerConfirm('是否初始化配置文件：self.config.js 文件').then((alias) => {
-  //       if (alias) {
-  //         console.log(123)
-  //       }
-  //     })
-  //   }
-  // }
 }

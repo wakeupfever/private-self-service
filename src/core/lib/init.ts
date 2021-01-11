@@ -7,7 +7,6 @@ import { infoLog, printError } from '../util/outputLog'
 import { configFileURL } from '../config/index'
 
 const createConfigFile = async (json) => {
-  // console.log('delConfigFile')
   const str = `module.exports = ${JSON.stringify(json, null, 2)}`
   fs.writeFileSync(configFileURL, str)
 }
@@ -59,27 +58,32 @@ const delConfigFile = async (json) => {
   console.log('createConfigFile')
 }
 
+export const initCreateConfigFile = (mode: string, callback: Function = () => {}) => {
+  const isExistConfigFile = getConfigExists()
+  if (!mode) {
+    printError('请指定模式 --mode, 例如：dev, test, prod')
+    return
+  }
+  if (isExistConfigFile) {
+    infoLog('当前环境下已存在：self.config.js 文件')
+    const inquirer = new ProxyInquirer()
+    inquirer.handlerConfirm(`是否重置config：${mode} 模式`).then(({ alias }: { alias: boolean }) => {
+      if (alias) {
+        createConfigFile(createConfigJson(mode))
+        // formatConfigFile()
+        callback()
+      }
+    }).catch(err => {
+      console.log(err)
+    })
+  } else {
+    createConfigFile(createConfigJson(mode))
+  }
+}
+
 export default {
   description: '初始化配置信息',
   perform: (mode: string = '') => {
-    const isExistConfigFile = getConfigExists()
-    if (!mode) {
-      printError('请指定初始化文件 --mode, 例如：dev, test, prod')
-      return
-    }
-    if (isExistConfigFile) {
-      infoLog('当前环境下已存在：self.config.js 文件')
-      const inquirer = new ProxyInquirer()
-      inquirer.handlerConfirm(`是否增加配置文件模式：self.config.js 文件 --mode ${mode} 模式`).then(({ alias }: { alias: boolean }) => {
-        if (alias) {
-          createConfigFile(createConfigJson(mode))
-          // formatConfigFile()
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    } else {
-      createConfigFile(createConfigJson(mode))
-    }
+    initCreateConfigFile(mode)
   }
 }
