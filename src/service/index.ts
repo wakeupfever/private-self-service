@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import program from 'commander'
-// import { printError } from 'private-self-service/src/core/util/outputLog'
 import { printError } from '../core/util/outputLog'
 
 interface Register {

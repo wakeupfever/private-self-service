@@ -1,9 +1,7 @@
 const { watch } = require('gulp')
 const fs = require('fs')
 const { join } = require('path')
-// const { ScriptC } = require('../../dist/cjs/src/command')
 const { ScriptC } = require('../../dist/cjs/command')
-// const { printSuccess, printInfo, printError, printMagenta } = require('../../dist/cjs/src/core/util/outputLog')
 const { printSuccess, printInfo, printError, printMagenta } = require('../../dist/cjs/core/util/outputLog')
 
 function getJsonFiles(jsonPath) {

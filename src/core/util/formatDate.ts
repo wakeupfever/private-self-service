@@ -15,7 +15,7 @@ export const timeFormat = (time: string | Date | number, format = 'yyyy-MM-dd hh
     'h+': time.getHours(),
     'm+': time.getMinutes(),
     's+': time.getSeconds(),
-    'q+': Math.floor((time.getMonth() + 3) / 3), // quarter
+    'q+': Math.floor((time.getMonth() + 3) / 3),
     'S': time.getMilliseconds()
   }
   if (/(y+)/.test(format)) { format = format.replace(RegExp.$1, (time.getFullYear() + '').substr(4 - RegExp.$1.length)) }

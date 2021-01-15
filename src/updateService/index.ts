@@ -256,7 +256,7 @@ export class UpdateServer extends With(ProxyInquirer) {
         }
       ]
     }
-    this.handlerConfirm(`${underline(name)}确认更新吗`, isInquirer).then(async ({ alias }: { alias: boolean }) => {
+    this.handlerConfirm(`${underline(name)} 确认更新吗`, isInquirer).then(async ({ alias }: { alias: boolean }) => {
       if (alias) {
         uploadFileSftp(sshConfig)
       }

@@ -19,16 +19,16 @@ export const createConfigJson = (env: string, config) => {
         scriptSh: '',
         dist: '',
         remote: '',
-        remoteWidthList: '',
-        getCopyFile: '',
-        isGetFiles: '',
-        coverUpData: '',
-        isInquirer: '',
-        isDingTalk: ''
+        remoteWidthList: [],
+        getCopyFile: [],
+        isGetFiles: false,
+        coverUpData: true,
+        isInquirer: false,
+        isDingTalk: false
       },
       serverFiles: {
         host: '',
-        port: '',
+        port: 22,
         username: '',
         password: '',
       },
