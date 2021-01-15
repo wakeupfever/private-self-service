@@ -53,7 +53,7 @@ export const formatConfigFile = () => {
   childProcess.execSync(`npx prettier --write ${configFileURL}`)
 }
 
-export const initCreateConfigFile = (mode: string, callback: Function = () => {}) => {
+export const initCreateConfigFile = (mode: string) => {
   const isExistConfigFile = getConfigExists()
   if (isExistConfigFile) {
     infoLog('当前环境下已存在：self.config.js 文件')
@@ -64,7 +64,6 @@ export const initCreateConfigFile = (mode: string, callback: Function = () => {}
       if (alias) {
         createConfigFile(createConfigJson(mode, configFileInfo), mode)
         formatConfigFile()
-        callback()
       }
     }).catch(err => {
       console.log(err)

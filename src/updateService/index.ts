@@ -8,7 +8,7 @@ import path from 'path'
 import { uploadFileSftp } from '../core/util/uploadFileSftp'
 import { With } from '../core/util/base'
 import { InquirerAlias, ProxyInquirer } from '../core/util/proxyInquirer'
-import { printError, successLog } from '../core/util/outputLog'
+import { printError, successLog, underline } from '../core/util/outputLog'
 
 const ssh = new NodeSSH()
 
@@ -240,7 +240,7 @@ export class UpdateServer extends With(ProxyInquirer) {
   async coverUploadFile(config: ServerFilesAttr, project: ProjectBaseAttr) {
     const { dist, remote, isGetFiles, getCopyFile, name, isInquirer } = project
     if (!fs.existsSync(dist)) {
-      printError(`请检查输出目录是否正确：${dist}`)
+      printError(`请检查部署目录是否存在：${underline(dist)}`)
       return
     }
     if (isGetFiles) await this.getCopyFile(getCopyFile, dist)
@@ -256,7 +256,7 @@ export class UpdateServer extends With(ProxyInquirer) {
         }
       ]
     }
-    this.handlerConfirm(`${name}确认更新吗`, isInquirer).then(async ({ alias }: { alias: boolean }) => {
+    this.handlerConfirm(`${underline(name)}确认更新吗`, isInquirer).then(async ({ alias }: { alias: boolean }) => {
       if (alias) {
         uploadFileSftp(sshConfig)
       }
@@ -274,7 +274,7 @@ export class UpdateServer extends With(ProxyInquirer) {
     const successful: string[] = []
     const { dist, remote, remoteWidthList = [], getCopyFile, isGetFiles, name, isInquirer } = project
     if (isGetFiles) await this.getCopyFile(getCopyFile, dist)
-    this.handlerConfirm(`${name}确认更新吗？`, isInquirer).then(({ alias }: { alias: boolean }) => {
+    this.handlerConfirm(`${underline(name)}确认更新吗？`, isInquirer).then(({ alias }: { alias: boolean }) => {
       if (alias) {
         ssh.connect(config).then(async () => {
           ssh.putDirectory(dist, remote, {
@@ -287,10 +287,10 @@ export class UpdateServer extends With(ProxyInquirer) {
             },
             tick: function (localPath, remotePath, error) {
               if (error) {
-                successLog(`${localPath}   文件上传失败`)
+                successLog(`${underline(localPath)}   文件上传失败`)
                 failed.push(localPath)
               } else {
-                successLog(`${remotePath }   '文件上传成功'`)
+                successLog(`${underline(remotePath) }   '文件上传成功'`)
                 successful.push(localPath)
               }
             }
