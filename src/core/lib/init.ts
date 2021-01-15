@@ -2,17 +2,16 @@ import fs from 'fs'
 import childProcess from 'child_process'
 
 import { ProxyInquirer } from '../util/proxyInquirer'
-import { getConfigExists } from '../config/index'
-import { infoLog, printError } from '../util/outputLog'
-import { configFileURL } from '../config/index'
+import { getConfigExists, configFileURL } from '../config/index'
+import { infoLog, successLog, underline } from '../util/outputLog'
 
-const createConfigFile = async (json) => {
+export const createConfigFile = async (json, mode) => {
   const str = `module.exports = ${JSON.stringify(json, null, 2)}`
   fs.writeFileSync(configFileURL, str)
+  successLog(`初始化 ${underline('self.config.js')} --mode ${underline(mode)} 成功`)
 }
 
-const createConfigJson = (env: string) => {
-  const configFileInfo = require(configFileURL)
+export const createConfigJson = (env: string, config) => {
   const baseTemplate = {
     [env]: {
       project: {
@@ -47,43 +46,37 @@ const createConfigJson = (env: string) => {
       }
     }
   }
-  return { ...configFileInfo, ...baseTemplate }
+  return { ...config, ...baseTemplate }
 }
 
-const formatConfigFile = () => {
+export const formatConfigFile = () => {
   childProcess.execSync(`npx prettier --write ${configFileURL}`)
-}
-
-const delConfigFile = async (json) => {
-  console.log('createConfigFile')
 }
 
 export const initCreateConfigFile = (mode: string, callback: Function = () => {}) => {
   const isExistConfigFile = getConfigExists()
-  if (!mode) {
-    printError('请指定模式 --mode, 例如：dev, test, prod')
-    return
-  }
   if (isExistConfigFile) {
     infoLog('当前环境下已存在：self.config.js 文件')
     const inquirer = new ProxyInquirer()
-    inquirer.handlerConfirm(`是否重置config：${mode} 模式`).then(({ alias }: { alias: boolean }) => {
+    const configFileInfo = require(configFileURL)
+    const isResetModeConfig = mode in configFileInfo
+    inquirer.handlerConfirm(`是否${isResetModeConfig ? '重置' : '创建'} ${underline('self.config.js')} 文件：--mode ${underline(mode)} 模式`).then(({ alias }: { alias: boolean }) => {
       if (alias) {
-        createConfigFile(createConfigJson(mode))
-        // formatConfigFile()
+        createConfigFile(createConfigJson(mode, configFileInfo), mode)
+        formatConfigFile()
         callback()
       }
     }).catch(err => {
       console.log(err)
     })
   } else {
-    createConfigFile(createConfigJson(mode))
+    createConfigFile(createConfigJson(mode, {}), mode)
   }
 }
 
-export default {
+export const commandConfig = {
   description: '初始化配置信息',
-  perform: (mode: string = '') => {
+  perform: (mode) => {
     initCreateConfigFile(mode)
   }
 }

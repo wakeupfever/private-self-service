@@ -1,6 +1,5 @@
 import logSymbols from 'log-symbols'
 import chalk from 'chalk'
-// import fs from 'fs'
 
 /**
  * @description 成功信息
@@ -51,6 +50,14 @@ export const printWarning = (message: any): void => {
 }
 
 /**
+ * @description 警告信息
+ * @param {*} message
+ */
+export const warningLog = (message: any): void => {
+  console.log(chalk.yellowBright(`i ${message}`));
+}
+
+/**
  * @description 错误信息
  * @param {*} message
  */
@@ -62,4 +69,4 @@ export const printError = (message: any): void => {
  * @description 提示部分
  * @param {*} message
  */
-export const underline = (message: any) => chalk.underline.redBright(`${message}`)
+export const underline = (message: any) => chalk.underline.magentaBright(`${message}`)

@@ -2,7 +2,7 @@ import { configFileURL } from '../config/index'
 import { initCreateConfigFile } from './init'
 import { UpdateServer } from '../../updateService/index'
 
-export default {
+export const commandConfig = {
   description: '文件上传服务',
   perform: (mode: string = '') => {
     initCreateConfigFile(mode, () => {

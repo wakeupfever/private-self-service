@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import program from 'commander'
+// import { printError } from 'private-self-service/src/core/util/outputLog'
+import { printError } from '../core/util/outputLog'
 
 interface Register {
   description: string
@@ -12,25 +14,31 @@ const setupDefaultCommands = (): void => {
   program.version(version, '-v, --version', '输出当前版本号')
 }
 
-const registerCommands = async () => {
-  const commandFiles: string = `${path.join(process.cwd())}/dist/cjs/core/lib/`
-  const files: string[] = await fs.promises.readdir(commandFiles);
+export const registerCommands = async () => {
+  const commandFiles: string = path.resolve(__dirname, '../core/lib/')
+  const files: string[] = await fs.promises.readdir(commandFiles)
   files.forEach((name: string): void => {
-    const { description, perform }: Register = require(`${commandFiles}/${name}`)
+    const { commandConfig }: { commandConfig: Register } = require(`${commandFiles}/${name}`)
+    const { description, perform } = commandConfig
     const commandName: string = name.split('.')[0]
     const alias: string = name.charAt(0)
     program
       .command(commandName)
       .description(description)
       .alias(alias)
-      .action(() => {
-        perform
+      .option('-m, --mode <mode>', 'setup deploy mode')
+      .action((options) => {
+        if (!options.mode) {
+          printError('请指定--mode 模式 例如：dev、test、prod等')
+          return
+        }
+        perform(options.mode)
       })
   })
 }
 
-export const init = (_id, _args = {}, rawArgv = []) => {
+export const init = async (_id, _args = {}, rawArgv = []) => {
   setupDefaultCommands()
-  registerCommands()
+  await registerCommands()
   program.parse(rawArgv, { from: 'user' })
-}
+} 

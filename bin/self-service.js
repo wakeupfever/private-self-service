@@ -1,4 +1,5 @@
-// const { init } = require('../dist/cjs/src/service/index')
+#!/usr/bin/env node
+
 const { init } = require('../dist/cjs/service/index')
 
 const rawArgv = process.argv.slice(2)
