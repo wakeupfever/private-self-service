@@ -4,45 +4,47 @@ import childProcess from 'child_process'
 import { ProxyInquirer } from '../util/proxyInquirer'
 import { getConfigExists, configFileURL } from '../config/index'
 import { infoLog, successLog, underline } from '../util/outputLog'
+import { BaseTemplate } from '../../types'
 
-export const createConfigFile = async (json, mode) => {
+const inquirer = new ProxyInquirer()
+
+export const createConfigFile = async (json: object, mode: string, isCreate: boolean = true) => {
   const str = `module.exports = ${JSON.stringify(json, null, 2)}`
   fs.writeFileSync(configFileURL, str)
-  successLog(`初始化 ${underline('self.config.js')} --mode ${underline(mode)} 成功`)
+  successLog(`${isCreate ? '初始化' : '删除'} ${underline('self.config.js')} --mode ${underline(mode)} 成功`)
 }
 
-export const createConfigJson = (env: string, config) => {
-  const baseTemplate = {
+export const createConfigJson = (env: string, config: BaseTemplate | object) => {
+  const baseTemplate: {
+    [key: string]: BaseTemplate
+  } = {
     [env]: {
-      project: {
+      projectConfig: {
         name: '',
-        scriptSh: '',
+        version: '',
         dist: '',
         remote: '',
         remoteWidthList: [],
-        getCopyFile: [],
+        copyFilePath: [],
         isGetFiles: false,
-        coverUpData: true,
+        isCoverUpData: true,
         isInquirer: false,
         isDingTalk: false
       },
-      serverFiles: {
+      serverConfig: {
         host: '',
         port: 22,
         username: '',
         password: '',
       },
-      testInfo: {
+      testConfig: {
         testers: [],
         developer: ['']
       },
-      dingTalk: {
-        development: {
-          robot: ''
-        },
-        production: {
-          robot: ''
-        }
+      dingTalkConfig: {
+        robot: '',
+        subscribeString: '',
+        subscribeArray: []
       }
     }
   }
@@ -53,29 +55,58 @@ export const formatConfigFile = () => {
   childProcess.execSync(`npx prettier --write ${configFileURL}`)
 }
 
-export const initCreateConfigFile = (mode: string) => {
-  const isExistConfigFile = getConfigExists()
-  if (isExistConfigFile) {
-    infoLog('当前环境下已存在：self.config.js 文件')
-    const inquirer = new ProxyInquirer()
-    const configFileInfo = require(configFileURL)
-    const isResetModeConfig = mode in configFileInfo
-    inquirer.handlerConfirm(`是否${isResetModeConfig ? '重置' : '创建'} ${underline('self.config.js')} 文件：--mode ${underline(mode)} 模式`).then(({ alias }: { alias: boolean }) => {
-      if (alias) {
-        createConfigFile(createConfigJson(mode, configFileInfo), mode)
-        formatConfigFile()
-      }
-    }).catch(err => {
-      console.log(err)
-    })
-  } else {
-    createConfigFile(createConfigJson(mode, {}), mode)
+/**
+ * @param {*} resolve
+ * @param {*} mode
+ * @return {*} 
+ */
+export const createConfig = async (resolve: Function, mode: string): Promise<Function> => {
+  const { alias } = await inquirer.handlerConfirm(`创建${underline('self.config.js')} 文件：--mode ${underline(mode)} 模式`)
+  if (alias) {
+    await createConfigFile(createConfigJson(mode, {}), mode)
+    formatConfigFile()
+    return resolve(true)
   }
+  return resolve(false)
+}
+
+/**
+ * @param {*} resolve
+ * @param {*} mode
+ * @return {*} 
+ */
+export const resetConfig = async (resolve: Function, mode: string): Promise<Function> => {
+  infoLog(`当前环境下已存在：${underline('self.config.js')} 文件`)
+  const configFileInfo = require(configFileURL)
+  const isResetModeConfig = mode in configFileInfo
+  const { alias } = await inquirer.handlerConfirm(`是否${isResetModeConfig ? '重置' : '创建'} ${underline('self.config.js')} 文件：--mode ${underline(mode)} 模式`)
+  if (alias) {
+    await createConfigFile(createConfigJson(mode, configFileInfo), mode)
+    formatConfigFile()
+    return resolve(true)
+  }
+  return resolve(false)
+}
+
+/**
+ * @param {string} mode
+ * @return {*}  {Promise<boolean>}
+ */
+export const initService = async (mode: string): Promise<boolean> => {
+  return new Promise(async (resolve, reject) => {
+    const isExistConfigFile = getConfigExists()
+    console.log(isExistConfigFile, 'isExistConfigFile')
+    if (isExistConfigFile) {
+      resetConfig(resolve, mode)
+    } else {
+      createConfig(resolve, mode)
+    }
+  })
 }
 
 export const commandConfig = {
   description: '初始化配置信息',
   perform: (mode) => {
-    initCreateConfigFile(mode)
+    initService(mode)
   }
 }

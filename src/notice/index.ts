@@ -1,50 +1,63 @@
 'use strict'
 import axios from 'axios'
+import { DingTalkConfig, ProjectConfig, TestConfig } from '../types'
+import { printError, successLog, underline } from '../core/util/outputLog'
 import { timeFormat } from '../core/util/formatDate'
+
+export const defaultNoticeTxt = (projectConfig: ProjectConfig, testConfig: TestConfig): string[] => {
+  const { name, version } = projectConfig
+  const { testers } = testConfig
+  return [`发布项目：${name}`, version && `发布版本：${version}`, `发布时间：${timeFormat(new Date())}`, testers.length >0 ? `相关人员: ${testers.join(',')}` : ''].filter(t => t)
+}
 
 export class GetNotice {
   /**
-   * @deprecated 企业微信发送推送内容
+   * @description 聚合推送内容
+   * @param {(string | string[])} txt
+   * @param {ProjectConfig} projectConfig
+   * @param {DingTalkConfig} dingTalkConfig
+   * @param {TestConfig} testConfig
+   * @memberof GetNotice
+   */
+  public serializationSubscribe(txt: string | string[], projectConfig: ProjectConfig, dingTalkConfig: DingTalkConfig, testConfig: TestConfig) {
+    const { robot } = dingTalkConfig
+    const { testers } = testConfig
+    if (!txt.length) {
+      printError('请填写订阅推送内容')
+      return
+    }
+    if (!robot) {
+      printError('请填写webhook地址')
+      return
+    }
+    let text = Array.isArray(txt) ? txt.join('\n') : txt
+    console.log(text)
+    this.sendNotice(robot, {
+      msgtype: 'text',
+      text: {
+        content: text,
+        mentioned_mobile_list: testers,
+      }
+    }, projectConfig)
+  }
+
+  /**
+   * @description 企业微信发送推送内容
    * @param {*} url 机器人推送地址
    * @param {*} opt 推送参数
    */
-  sendNotice(url: string, opt): void {
+  private sendNotice(url: string, opt, projectConfig: ProjectConfig) {
+    const { name } = projectConfig
     axios.post(url, opt).then(res => {
       console.log(res.data)
+      if (res.data.errcode === 0) {
+        successLog(`${underline(name)} 订阅推送成功\n`)
+      } else {
+        printError(`${underline(name)} 订阅推送失败`)
+      }
     }).catch(error => {
       console.log(error)
     })
-  }
-  /**
-   * @description 重组版本信息和版本人信息 markdown 格式
-   * @param {string[], { name: string, phone, string }} branchInfo
-   * @param {*} publisher
-   * @memberof GetNotice
-   */
-  serializationGitProject(branchInfo, publisher, name, testInfo, dingTalk) {
-    if (Array.isArray(branchInfo)) {
-      new TypeError('请检查branchInfo参数')
-    }
-    if (publisher) {
-      new TypeError('请检查publisher参数')
-    }
-    const { development } = dingTalk
-    const { robot } = development
-    console.log(robot, 'robot')
-    const { testers } = testInfo
-    let mkt = `当前项目：${name}\n`
-    mkt += `发布项目：${name}\n`
-    mkt += `发布版本：${branchInfo.join(',')}\n`
-    mkt += `发布时间：${timeFormat(new Date())}\n`
-    mkt += `发布人员：${publisher.name}\n`
-    const t = {
-      msgtype: 'text',
-      text: {
-        content: mkt,
-        mentioned_mobile_list: testers,
-      }
-    }
-    this.sendNotice(robot, t)
   }
 }
 

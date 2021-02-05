@@ -1,5 +1,9 @@
 const watchFileChange = require('./gulp/compile')
-const { v1 } = require('./dist/cjs/gulp/index')
+const { i, r, d, s } = require('./dist/cjs/gulp/index')
 
 exports.server = watchFileChange
-exports.v = v1
+
+exports.i = i
+exports.r = r
+exports.d = d
+exports.s = s

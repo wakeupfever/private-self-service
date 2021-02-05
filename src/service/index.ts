@@ -8,7 +8,7 @@ interface Register {
   perform: Function
 }
 
-const setupDefaultCommands = (): void => {
+const setupDefaultCommands = () => {
   const { version } = require(`${ path.join(process.cwd()) }\/package.json`)
   program.version(version, '-v, --version', '输出当前版本号')
 }
@@ -16,7 +16,7 @@ const setupDefaultCommands = (): void => {
 export const registerCommands = async () => {
   const commandFiles: string = path.resolve(__dirname, '../core/lib/')
   const files: string[] = await fs.promises.readdir(commandFiles)
-  files.forEach((name: string): void => {
+  files.forEach((name: string) => {
     const { commandConfig }: { commandConfig: Register } = require(`${commandFiles}/${name}`)
     const { description, perform } = commandConfig
     const commandName: string = name.split('.')[0]

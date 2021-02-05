@@ -4,6 +4,9 @@ import { exec } from 'child_process'
 export class ScriptC {
   /**
    * @description Command 执行异常
+   * @param {string} scriptsSh
+   * @return {*}  {Promise<string>}
+   * @memberof ScriptC
    */
   handleCommand(scriptsSh: string): Promise<string> {
     return new Promise((resolve, reject) => {

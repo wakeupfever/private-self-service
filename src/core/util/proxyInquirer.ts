@@ -1,23 +1,5 @@
 import inquirer from 'inquirer'
-
-export type InquirerAlias = 'alias'
-
-export interface InquirerConfig {
-  type: 'input' | 'number' | 'confirm' | 'list' | 'rawlist' | 'expand' | 'checkbox' | 'password' | 'editor'
-  name: InquirerAlias
-  message: string | Function
-  default?: string | number | boolean | any[] | Function
-  choices?: any[] | Function
-  validate?: Function
-  filter?: Function
-  transformer?: Function
-  when?: boolean | Function
-  pageSize?: number
-  prefix?: string
-  suffix?: string
-  askAnswered?: boolean
-  loop?: boolean
-}
+import { InquirerConfig } from '../../types/index'
 
 export class ProxyInquirer {
   constructor() {
@@ -28,7 +10,7 @@ export class ProxyInquirer {
    * @type {InquirerConfig}
    * @memberof ProxyInquirer
    */
-  public inquirerConfig: InquirerConfig = {
+  private inquirerConfig: InquirerConfig = {
     name: 'alias',
     message: '',
     type: 'confirm'
@@ -36,12 +18,11 @@ export class ProxyInquirer {
 
   /**
    * @description 统一封装 inquirer 调用
-   *
    * @param {*} config
    * @return {*}  {Promise<Function>}
    * @memberof ProxyInquirer
    */
-  async baseInquirer(config): Promise<Function> {
+  private async baseInquirer(config): Promise<{ alias: boolean }> {
     const result = await inquirer.prompt([config])
     return result
   }
@@ -53,7 +34,7 @@ export class ProxyInquirer {
    * @return {*}  {(Promise<Function | { alias: boolean }>)}
    * @memberof ProxyInquirer
    */
-  handlerConfirm(message: string, isInquirer: boolean = true): Promise<Function | { alias: boolean } | { alias: InquirerAlias }> {
+  public handlerConfirm(message: string, isInquirer: boolean = true): Promise<{ alias: boolean }> {
     this.inquirerConfig.message = message
     this.inquirerConfig.type = 'confirm'
     if (isInquirer) {

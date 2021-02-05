@@ -1,8 +1,7 @@
 'use strict'
-import { With } from '../core/util/base'
 import { ScriptC } from './scriptC'
 
-export class GitC extends With(ScriptC) {
+export class GitC extends ScriptC {
   /**
    * @description 获取当前项目git所有分支信息
    * @return {*}  {Promise<string[]>}

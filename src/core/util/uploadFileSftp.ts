@@ -42,6 +42,7 @@ export const uploadFileSftp = async (config) => {
     }
     await client.end()
   } catch (error) {
-    printError('上传失败，请检查当前环境')
+    console.log(error)
   }
+  return 1
 }
