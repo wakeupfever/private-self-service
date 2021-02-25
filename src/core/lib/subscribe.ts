@@ -18,9 +18,10 @@ export const subscribeService = async (mode: string) => {
   }
   const config = configFileInfo[mode]
   const { dingTalkConfig, testConfig, projectConfig } = config
-  const { name, version } = projectConfig
+  const { subscribeString, subscribeArray } = dingTalkConfig
+  let txt = subscribeArray.length ? subscribeArray : subscribeString
   const serializationSubscribe = new GetNotice()
-  serializationSubscribe.serializationSubscribe([`发布项目：${name}`, `发布版本：${version}`], projectConfig, dingTalkConfig, testConfig)
+  serializationSubscribe.serializationSubscribe(txt, projectConfig, dingTalkConfig, testConfig)
 }
 
 export const commandConfig = {

@@ -27,12 +27,23 @@ export class UpdateServer {
    * @return {*} 
    * @memberof UpdateServer
    */
-  copyFilePath(copyFilePath: CopyFilePath, dist: string) {
+  handleCopyFilePath(copyFilePath: CopyFilePath, dist: string) {
     if (!copyFilePath.length) return
-    fs.mkdir(dist, { recursive: true }, (err) => {
-      if (err) throw err
+    if (!fs.existsSync(dist)) {
+      fs.mkdir(dist, { recursive: true }, (err) => {
+        if (err) throw err
+      })
+    }
+    // const isCheckFile = copyFilePath.map(item => item).every(item => fs.existsSync(item))
+    copyFilePath.forEach(item => {
+      let path = item.replace(/[*|/]/g, '')
+      let isCheckFile = fs.existsSync(path)
+      if (!isCheckFile) {
+        printError(`请检查上传聚合目录是否存在：${underline(path)}`)
+        process.exit(0)
+      }
     })
-    return gulp.src(copyFilePath, { base: '.' }).pipe(gulp.dest(dist))
+    return gulp.src(copyFilePath, { base: '.', allowEmpty: true }).pipe(gulp.dest(dist))
   }
 
   /**
@@ -44,13 +55,13 @@ export class UpdateServer {
    * @memberof UpdateServer
    */
   async coverUploadFile(config: ServerConfig, projectConfig: ProjectConfig, dingTalkConfig: DingTalkConfig, testConfig: TestConfig) {
-    const { dist, remote, isGetFiles, copyFilePath, name, isInquirer, isDingTalk, version } = projectConfig
+    const { dist, remote, isGetFiles, copyFilePath, name, isInquirer, isDingTalk } = projectConfig
     const { subscribeString, subscribeArray } = dingTalkConfig
     if (!fs.existsSync(dist)) {
-      printError(`请检查部署目录是否存在：${underline(dist)}`)
+      printError(`请检查上传指定目录是否存在：${underline(dist)}`)
       return
     }
-    if (isGetFiles) await this.copyFilePath(copyFilePath, dist)
+    if (isGetFiles) await this.handleCopyFilePath(copyFilePath, dist)
     const localDir = path.resolve(dist)
     const sshConfig = {
       ...config,
@@ -67,10 +78,13 @@ export class UpdateServer {
     if (alias) {
       const isNext = await uploadFileSftp(sshConfig)
       if (isNext) {
+        successLog(`${underline(name)} 执行成功 已上传完毕`)
         if (isDingTalk) {
           const subscribeTxt = subscribeString || subscribeArray.length && subscribeArray || defaultNoticeTxt(projectConfig, testConfig)
           notice.serializationSubscribe(subscribeTxt, projectConfig, dingTalkConfig, testConfig)
         }
+      } else {
+        printError(`${underline(name)} 执行失败`)
       }
     }
   }
@@ -96,7 +110,12 @@ export class UpdateServer {
     const successful: string[] = []
     const { dist, remote, remoteWidthList = [], copyFilePath, isGetFiles, name, isInquirer, isDingTalk, version } = projectConfig
     const { subscribeString, subscribeArray } = dingTalkConfig
-    if (isGetFiles) await this.copyFilePath(copyFilePath, dist)
+    if (!fs.existsSync(dist)) {
+      printError(`请检查上传指定目录是否存在：${underline(dist)}`)
+      return
+    }
+    if (isGetFiles) await this.handleCopyFilePath(copyFilePath, dist)
+    
     const { alias } = await proxyInquirer.handlerConfirm(`${underline(name)}确认更新吗？`, isInquirer)
     if (alias) {
       ssh.connect(config).then(async () => {
@@ -110,7 +129,7 @@ export class UpdateServer {
           },
           tick: function (localPath, remotePath, error) {
             if (error) {
-              successLog(`${localPath}   文件上传失败`)
+              successLog(`${~~localPath}   文件上传失败`)
               failed.push(localPath)
             } else {
               successLog(`${remotePath}   文件上传成功`)
@@ -119,7 +138,7 @@ export class UpdateServer {
           }
         }).then(function (status) {
           if (status) {
-            successLog(`${underline(name)} 执行成功`)
+            successLog(`${underline(name)} 执行成功, 已上传完毕`)
             if (isDingTalk) {
               const subscribeTxt = subscribeString || subscribeArray.length && subscribeArray || defaultNoticeTxt(projectConfig, testConfig)
               notice.serializationSubscribe(subscribeTxt, projectConfig, dingTalkConfig, testConfig)

@@ -1,6 +1,6 @@
 {
   "name": "private-self-service",
-  "version": "0.2.5",
+  "version": "0.2.8",
   "description": "Private self-service",
   "main": "dist/cjs/index.js",
   "typings": "dist/typings/index.d.ts",
@@ -13,7 +13,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "private-self-service": "bin/private-self-service.js"
+    "self-service": "bin/self-service.js"
   },
   "scripts": {
     "lint": "(tsc -p . --noEmit) && (eslint . --ext .ts) && (prettier --list-different src/*.ts)",

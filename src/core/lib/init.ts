@@ -95,7 +95,6 @@ export const resetConfig = async (resolve: Function, mode: string): Promise<Func
 export const initService = async (mode: string): Promise<boolean> => {
   return new Promise(async (resolve, reject) => {
     const isExistConfigFile = getConfigExists()
-    console.log(isExistConfigFile, 'isExistConfigFile')
     if (isExistConfigFile) {
       resetConfig(resolve, mode)
     } else {

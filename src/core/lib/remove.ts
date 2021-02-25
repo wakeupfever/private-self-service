@@ -1,7 +1,6 @@
 import { createConfigFile, formatConfigFile } from './init'
 import { printError, underline } from '../util/outputLog'
 import { configFileURL, checkConfigFile } from '../config/index'
-import { initService } from '../lib/init'
 
 export const delConfigMode = async (mode) => {
   const isNext = await checkConfigFile(mode)

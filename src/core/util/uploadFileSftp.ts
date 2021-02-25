@@ -17,7 +17,7 @@ const copy = async (src, target, sftpClient) => {
   let data = fs.readdirSync(src)
 
   for (const item of data) {
-    successLog(`${target}/${item}   上传成功`)
+    successLog(`${target}/${item}   文件上传成功`)
     let paths = `${src}/${item}`
     let targetPaths = `${target}/${item}`
 
