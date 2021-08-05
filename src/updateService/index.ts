@@ -11,7 +11,6 @@ import { printError, successLog, underline } from '../core/util/outputLog'
 import { CopyFilePath, ServerConfig, ProjectConfig, DingTalkConfig, TestConfig } from '../types'
 import { GetNotice } from '../notice'
 import { defaultNoticeTxt } from '../notice'
-import { timeFormat } from '../core/util/formatDate'
 
 const ssh = new NodeSSH()
 

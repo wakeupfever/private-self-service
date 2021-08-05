@@ -39,19 +39,19 @@
     "url": "https://github.com/wakeupfive/private-self-service/issues"
   },
   "homepage": "https://github.com/wakeupfive/private-self-service#readme",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
+    "@types/node": "^16.4.12",
     "axios": "^0.21.0",
+    "chalk": "^4.1.2",
     "commander": "^6.1.0",
-    "ssh2-sftp-client": "^6.0.0",
-    "chalk": "^4.1.0",
     "gulp": "^4.0.2",
     "inquirer": "^7.3.3",
-    "log-symbols": "^4.0.0",
+    "log-symbols": "^4.1.0",
     "minimist": "^1.2.5",
     "node-ssh": "^9.0.0",
     "ora": "^5.1.0",
+    "ssh2-sftp-client": "^6.0.0",
     "typescript": "3.8.3"
   }
 }
