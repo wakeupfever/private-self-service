@@ -4,3 +4,7 @@ import { GitC, ScriptC } from './command'
 import { FormateJson } from './formateJson'
 
 export { UpdateServer, GetNotice, GitC, ScriptC, FormateJson }
+
+const json = new FormateJson()
+
+json.init()

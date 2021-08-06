@@ -18,6 +18,7 @@
   "scripts": {
     "lint": "(tsc -p . --noEmit) && (eslint . --ext .ts) && (prettier --list-different src/*.ts)",
     "dev": "yarn build:cjs && yarn gulp server --mode dev",
+    "serve": "node dist/cjs/index",
     "prepare": "yarn build:clean && yarn build:cjs && yarn build:esm && yarn build:typings",
     "build:clean": "rm -rf dist",
     "build:esm": "tsc --module es2015 --target es2018 --outDir dist/esm && mv dist/esm/index.js dist/esm/index.mjs",

@@ -33,9 +33,12 @@ function esModule (out) {
 }
 
 function commonModule (out) {
-  out.handleCommand('yarn build:cjs').then(r => {
+  out.handleCommand('npm run build:cjs').then(r => {
     console.log('\n' + r)
     printSuccess('ts文件生成CommonJS文件成功')
+    out.handleCommand('npm run serve').then(r => {
+      console.log('\n' + r)
+    })
   }).catch(e => {
     console.log(e)
     printError('ts文件生成CommonJS文件异常')
