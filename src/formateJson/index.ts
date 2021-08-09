@@ -1,5 +1,4 @@
 import { printError } from "../core/util/outputLog"
-import JSON_DATA from "./index.json"
 
 interface Options {
   target: string
@@ -71,12 +70,12 @@ export class FormateJson {
 
   /**
    * @description 默认方法，返回指定格式的 树结构
-   * @param {any[]} [json=JSON_DATA]
+   * @param {DeepJson[]} [json=[]]
    * @param {Options} [options={ target: 'addressTreePCD', oldKey: ['childArea', 'areaName', 'areaCode'], newKey: ['children', 'label', 'value'] }]
    * @return {*}  {DeepNewKeyJson[]}
    * @memberof FormateJson
    */
-  public init(json: any[] = JSON_DATA, options: Options = { target: 'addressTreePCD', oldKey: ['childArea', 'areaName', 'areaCode'], newKey: ['children', 'label', 'value'] }): DeepNewKeyJson[] {
+  public init(json: DeepJson[] = [], options: Options = { target: 'addressTreePCD', oldKey: ['childArea', 'areaName', 'areaCode'], newKey: ['children', 'label', 'value'] }): DeepNewKeyJson[] {
     if (!Array.isArray(json)) {
       throw Error('json is not array')
     }
