@@ -8,12 +8,12 @@
 
 使用 npm
 ```
-npm install privice-self-service --save-dev
+npm install private-self-service --save-dev
 ```
 
 使用 yarn
 ```
-yarn add privice-self-service --dev
+yarn add private-self-service --dev
 ```
 
 ## 调用参数以及支持命令

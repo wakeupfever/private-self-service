@@ -23,7 +23,7 @@ function getJsonFiles(jsonPath) {
   return jsonFiles
 }
 
-function esModule (out) {
+function esModule(out) {
   out.handleCommand('yarn build:esm').then(r => {
     console.log('\n' + r)
     printSuccess('ts文件生成ES2015文件成功')
@@ -32,7 +32,7 @@ function esModule (out) {
   })
 }
 
-function commonModule (out) {
+function commonModule(out) {
   out.handleCommand('yarn build:cjs').then(r => {
     console.log('\n' + r)
     printSuccess('ts文件生成CommonJS文件成功')
@@ -42,7 +42,7 @@ function commonModule (out) {
   })
 }
 
-function init (cb) {
+function init(cb) {
   const out = new ScriptC()
   commonModule(out)
   cb()
@@ -55,7 +55,7 @@ module.exports = function watchFileChange() {
     list.forEach(path => {
       printInfo(`发现文件  ${path}`)
     })
-    init(() => {})
+    init(() => { })
   })
   watcher.on('change', path => {
     printInfo(`变动文件  ${path}`)

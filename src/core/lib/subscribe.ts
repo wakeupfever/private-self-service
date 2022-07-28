@@ -1,7 +1,5 @@
 import { GetNotice } from '../../notice'
-import { BaseTemplate, DingTalkConfig, TestConfig } from '../../types'
-import { configFileURL, checkConfigFile, getConfigExists } from '../config/index'
-import { initService } from '../lib/init'
+import { configFileURL, getConfigExists } from '../config/index'
 import { printError, underline } from '../util/outputLog'
 
 export const subscribeService = async (mode: string) => {
